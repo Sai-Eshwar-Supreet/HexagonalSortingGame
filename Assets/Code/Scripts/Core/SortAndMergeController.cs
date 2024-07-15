@@ -43,7 +43,7 @@ public class SortAndMergeController : MonoBehaviour
         List<HexCell> neighbors = HexGridGenerator.GetNeighbors_Static(cell);
 
         List<HexCell> validNeighbors = neighbors.Where(
-            val => (val.IsOccupied && (val.OccupantStack.TopHexagonIndex == topIndex))).ToList();
+            val => (val.IsOccupied && val.OccupantStack.Elements.Count > 0 && (val.OccupantStack.TopHexagonIndex == topIndex))).ToList();
 
         if (validNeighbors == null || validNeighbors.Count == 0) yield break;
 
