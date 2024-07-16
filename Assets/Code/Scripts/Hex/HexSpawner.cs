@@ -5,11 +5,6 @@ using UnityEngine;
 public class HexSpawner : MonoBehaviour
 {
     [SerializeField] private Transform spawnPositionsTransform;
-    [SerializeField] private HexElement hexElementPrefab;
-    [SerializeField] private HexStack hexStackPrefab;
-    
-    [SerializeField, MinMaxSlider(1,9)] private Vector2Int minMaxHexElementsCount;
-    [SerializeField] private List<Material> materials;
 
     private int availableStacksCount = 0;
 
@@ -37,32 +32,17 @@ public class HexSpawner : MonoBehaviour
 
     private void SpawnStacks()
     {
+        HexStack stackPrefab = LevelManager.Instance.CurrentLevelData.HexStackPrefab;
+        Vector2Int minMaxHexElementsCount = LevelManager.Instance.CurrentLevelData.MinMaxHexElementsCount;
         for (int i = 0; i < spawnPositionsTransform.childCount; i++)
         {
             Transform spawnTransform = spawnPositionsTransform.GetChild(i);
-            HexStack hexStack =  Instantiate(hexStackPrefab, spawnTransform);
+            HexStack hexStack =  Instantiate(stackPrefab, spawnTransform);
             int count = Random.Range(minMaxHexElementsCount.x, minMaxHexElementsCount.y + 1);
 
+            hexStack.InstantiateElements(count);
 
-
-            int[] selectedMatsIndices = new int[] { GetRandomMaterialIndex(), GetRandomMaterialIndex(), GetRandomMaterialIndex() };
-            int changePoint1, changePoint2;
-
-            changePoint1 = Random.Range(0, count);
-            changePoint2 = changePoint1 + Random.Range(0, count - changePoint1);
-
-            for(int j = 0; j < count; j++)
-            {
-                HexElement element = Instantiate(hexElementPrefab, hexStack.transform);
-                hexStack.Add(element);
-                int selectedIndex = selectedMatsIndices[(j < changePoint1) ? 0 : (j<changePoint2) ? 1 : 2];
-                element.SetMaterial(materials[selectedIndex], selectedIndex);
-            }
             availableStacksCount++;
         }
-    }
-    private int GetRandomMaterialIndex()
-    {
-        return Random.Range(0, materials.Count);
     }
 }

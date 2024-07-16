@@ -44,3 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75bf23491258ec441912ea480f72f0f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hexElementPrefab: {fileID: 8985429659729365673, guid: e868e8f93312e1a41b8186ee39a18182,
+    type: 3}
+  materials:
+  - {fileID: 2100000, guid: 229daf44ecaddb44e94a67e12dfba057, type: 2}
+  - {fileID: 2100000, guid: 7a58c507314df354395c1e1354eca71a, type: 2}
+  - {fileID: 2100000, guid: a33d206a51bb3bb448a7909b4ac96a5f, type: 2}
+  - {fileID: 2100000, guid: cbb32c3268d88434992e8a815d46c2a8, type: 2}
+  - {fileID: 2100000, guid: 449731c128a5b0e428b746a2772e3fe0, type: 2}
+  - {fileID: 2100000, guid: 7170ccab138320c4e92d483eac3ec04a, type: 2}

@@ -15,10 +15,7 @@ public class HexGridGenerator : MonoBehaviour
     [SerializeField] private GameObject hexCellPrefab;
 
     [Header("Grid Settings")]
-    [SerializeField] private bool isAxial = true;
-    [SerializeField, Min(1)] private int gridSize = 3;
-
-    private float maxDistance;
+    [SerializeField] private HexGridData gridData;
 
     private readonly Dictionary<Vector2Int, HexCell> cells = new();
 
@@ -29,27 +26,24 @@ public class HexGridGenerator : MonoBehaviour
         if (instance == null) instance = this;
         else enabled = false;
     }
+    private void Start()
+    {
+        GenerateGrid();
+    }
     private void OnDestroy()
     {
         if(instance == this) instance = null;
     }
-
-    private void OnEnable()
-    {
-        GenerateGrid();
-    }
-    public void GenerateGrid()
+    private void GenerateGrid()
     {
         transform.Clear();
         cells.Clear();
 
-        maxDistance = grid.CellToWorld(Vector3Int.right).magnitude * gridSize;
-
         SetupNeighborsOffset();
 
-        for (int x = -gridSize; x <= gridSize; x++)
+        foreach(var gridCell in gridData.hexCells)
         {
-            for (int y = -gridSize; y <= gridSize; y++) CreateCell(x, y);
+            CreateCell(gridCell.Index.x, gridCell.Index.y, gridCell.ShoudInitStacks);
         }
     }
     private void SetupNeighborsOffset()
@@ -65,13 +59,13 @@ public class HexGridGenerator : MonoBehaviour
 
     }
 
-    private void CreateCell(int x, int y)
+    private void CreateCell(int x, int y, bool shouldInitStacks)
     {
         Vector3 spawnPos = grid.CellToWorld(new Vector3Int(x, y, 0));
-        if (isAxial && spawnPos.magnitude > maxDistance) return;
 
         HexCell cell = Instantiate(hexCellPrefab, spawnPos, Quaternion.identity, transform).GetComponent<HexCell>();
         cells.Add(new Vector2Int(x, y), cell);
+        if(shouldInitStacks) cell.SpawnInitStacks();
         cell.gameObject.name = $"Cell ({x}, {y})";
     }
 

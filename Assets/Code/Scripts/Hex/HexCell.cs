@@ -11,7 +11,6 @@ public class HexCell : MonoBehaviour
     private HexStack occupantStack;
     public bool IsOccupied => occupantStack != null;
     public HexStack OccupantStack => occupantStack;
-
     public void OnPointerEnter()
     {
         meshRenderer.sharedMaterial = hoveredMat;
@@ -36,5 +35,14 @@ public class HexCell : MonoBehaviour
     {
         occupantStack = stack;
         stack.transform.SetParent(transform, true);
+    }
+    public void SpawnInitStacks()
+    {
+        HexStack prefab = LevelManager.Instance.CurrentLevelData.HexStackPrefab;
+        Vector2Int minMaxHexElementsCount = LevelManager.Instance.CurrentLevelData.MinMaxHexElementsCount;
+        HexStack hexStack = Instantiate(prefab, transform);
+        int count = Random.Range(minMaxHexElementsCount.x, minMaxHexElementsCount.y + 1);
+        hexStack.InstantiateElements(count);
+        PlaceHexStack(hexStack);
     }
 }
