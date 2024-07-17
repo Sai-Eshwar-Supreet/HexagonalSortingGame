@@ -90,6 +90,8 @@ public class SortAndMergeController : MonoBehaviour
 
         if (count < 10) return;
 
+        GameManager.Instance.AddExp(count * LevelManager.Instance.CurrentLevelData.ExpPerElement);
+
         while (hexStack.Elements.Count > 0 && hexStack.Peek().MaterialIndex == topIndex)
         {
             var element = hexStack.Pop();

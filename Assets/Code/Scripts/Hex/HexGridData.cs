@@ -4,13 +4,14 @@ using UnityEngine;
 [System.Serializable]
 public class GridCell
 {
-    public Vector2Int Index { get; private set; }
-    public bool ShoudInitStacks;
+    [SerializeField] private Vector2Int index;
+    public bool ShouldInitStacks;
+    public Vector2Int Index => index;
 
     public GridCell(Vector2Int index, bool isInteractable = false)
     {
-        this.Index = index;
-        this.ShoudInitStacks = isInteractable;
+        this.index = index;
+        ShouldInitStacks = isInteractable;
     }
 }
 

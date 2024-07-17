@@ -8,17 +8,13 @@ public class LevelManager : MonoBehaviour
     private static LevelManager instance;
 
     [SerializeField] List<LevelData> levelDataList;
-
-    private int currentLevel;
     
-    public LevelData CurrentLevelData => levelDataList[currentLevel - 1];
+    public LevelData CurrentLevelData => levelDataList[GameManager.CurrentLevel - 1];
 
 
     private void Awake()
     {
         if (instance == null) instance = this;
         else enabled = false;
-        currentLevel = 1;
     }
-
 }

@@ -14,9 +14,6 @@ public class HexGridGenerator : MonoBehaviour
     [SerializeField] private Grid grid;
     [SerializeField] private GameObject hexCellPrefab;
 
-    [Header("Grid Settings")]
-    [SerializeField] private HexGridData gridData;
-
     private readonly Dictionary<Vector2Int, HexCell> cells = new();
 
     private readonly List<Vector3> neighboursOffset = new();
@@ -25,8 +22,10 @@ public class HexGridGenerator : MonoBehaviour
     {
         if (instance == null) instance = this;
         else enabled = false;
+
+        SetupNeighborsOffset();
     }
-    private void Start()
+    private void OnEnable()
     {
         GenerateGrid();
     }
@@ -39,11 +38,9 @@ public class HexGridGenerator : MonoBehaviour
         transform.Clear();
         cells.Clear();
 
-        SetupNeighborsOffset();
-
-        foreach(var gridCell in gridData.hexCells)
+        foreach(var gridCell in LevelManager.Instance.CurrentLevelData.GridData.hexCells)
         {
-            CreateCell(gridCell.Index.x, gridCell.Index.y, gridCell.ShoudInitStacks);
+            CreateCell(gridCell.Index.x, gridCell.Index.y, gridCell.ShouldInitStacks);
         }
     }
     private void SetupNeighborsOffset()

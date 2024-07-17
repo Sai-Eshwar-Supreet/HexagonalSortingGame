@@ -13,34 +13,41 @@ MonoBehaviour:
   m_Name: Hex Grid 1
   m_EditorClassIdentifier: 
   hexCells:
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
-  - ShoudInitStacks: 0
+  - index: {x: -2, y: -1}
+    ShouldInitStacks: 0
+  - index: {x: -2, y: 0}
+    ShouldInitStacks: 0
+  - index: {x: -2, y: 1}
+    ShouldInitStacks: 0
+  - index: {x: -1, y: -2}
+    ShouldInitStacks: 0
+  - index: {x: -1, y: -1}
+    ShouldInitStacks: 0
+  - index: {x: -1, y: 0}
+    ShouldInitStacks: 0
+  - index: {x: -1, y: 1}
+    ShouldInitStacks: 0
+  - index: {x: -1, y: 2}
+    ShouldInitStacks: 0
+  - index: {x: 0, y: -2}
+    ShouldInitStacks: 0
+  - index: {x: 0, y: -1}
+    ShouldInitStacks: 0
+  - index: {x: 0, y: 0}
+    ShouldInitStacks: 0
+  - index: {x: 0, y: 1}
+    ShouldInitStacks: 0
+  - index: {x: 0, y: 2}
+    ShouldInitStacks: 0
+  - index: {x: 1, y: -2}
+    ShouldInitStacks: 0
+  - index: {x: 1, y: -1}
+    ShouldInitStacks: 0
+  - index: {x: 1, y: 0}
+    ShouldInitStacks: 0
+  - index: {x: 1, y: 1}
+    ShouldInitStacks: 0
+  - index: {x: 1, y: 2}
+    ShouldInitStacks: 0
+  - index: {x: 2, y: 0}
+    ShouldInitStacks: 0

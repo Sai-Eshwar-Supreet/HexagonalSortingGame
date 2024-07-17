@@ -4,23 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Unity.VisualScripting;
+using System.Diagnostics.Eventing.Reader;
 
 public class HexGridEditorWindow : EditorWindow
 {
-    private const float cellSize = 50f; // Size of each cell in pixels
+    private const float cellSize = 70f; // Size of each cell in pixels
     private const float cellOffsetX = 0.75f * cellSize; // X offset between cells in a row
     private const float cellOffsetY = 0.866025404f * cellSize; // Y offset between rows
 
     private int gridSize = 3; // Grid dimensions
-    private GameObject cellPrefab;
     private bool isAxial = true; // Axial coordinate system
     private HexGridData hexGridData; // The ScriptableObject to save the data to
     private float maxDistance; // Maximum distance for axial grid
 
     private Grid grid; // Unity's Grid component
 
-    private Dictionary<Vector2Int, GameObject> sceneObjects;
     private Dictionary<Vector2Int, GridCell> hexCells; // Store the hex cells
+
+    private Vector2 scrollPosition = Vector2.zero;
 
     [MenuItem("Window/Hex Grid Editor")]
     public static void ShowWindow()
@@ -39,10 +40,7 @@ public class HexGridEditorWindow : EditorWindow
 
     private void ResetWindow()
     {
-        grid?.transform.Clear();
-        sceneObjects?.Clear();
         hexCells?.Clear();
-        sceneObjects ??= new();
         hexCells ??= new();
     }
 
@@ -51,7 +49,6 @@ public class HexGridEditorWindow : EditorWindow
         EditorGUILayout.LabelField("Hex Grid Editor", EditorStyles.boldLabel);
 
         grid = (Grid)EditorGUILayout.ObjectField("Grid Component", grid, typeof(Grid), true);
-        cellPrefab = (GameObject)EditorGUILayout.ObjectField("Cell Prefab", cellPrefab, typeof(GameObject), true);
 
         gridSize = EditorGUILayout.IntField("Grid Size", gridSize);
         isAxial = EditorGUILayout.Toggle("Is Axial", isAxial);
@@ -66,34 +63,38 @@ public class HexGridEditorWindow : EditorWindow
             return;
         }
         if (hexCells == null || hexCells.Count == 0) return;
+
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
         // Display the hex grid
-        for (int y = -gridSize; y <= gridSize; y++)
+        for (int y = gridSize; y >= -gridSize; y--)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Space(cellOffsetX * Mathf.Abs(y));
             for (int x = -gridSize; x <= gridSize; x++)
             {
-                if (hexCells.TryGetValue(new(x, y), out GridCell cell))
+                if (!IsIndexValid(x, y)) continue;
+                hexCells.TryGetValue(new(x, y), out GridCell cell);
+                GUI.color = cell == null? Color.grey : cell.ShouldInitStacks ? Color.blue : Color.white;
+                if (GUILayout.Button($"({x},{y})", GUILayout.Width(cellSize - 20)))
                 {
-                    GUI.color = cell.ShoudInitStacks ? Color.blue : Color.white;
-                    if (GUILayout.Button($"({x},{y})", GUILayout.Width(cellSize)))
+                    if(cell != null) cell.ShouldInitStacks = !cell.ShouldInitStacks;
+                }
+                GUI.color = cell == null ? Color.grey : Color.white;
+                if (GUILayout.Button("X", GUILayout.Width(20)))
+                {
+                    Vector2Int index = new(x, y);
+                    if (hexCells.ContainsKey(index)) hexCells.Remove(index);
+                    else
                     {
-                        cell.ShoudInitStacks = !cell.ShoudInitStacks;
-                    }
-                    GUI.color = Color.white;
-                    if (GUILayout.Button("X", GUILayout.Width(20)))
-                    {
-                        Vector2Int index = new(x, y);
-                        hexCells.Remove(index);
-                        DestroyImmediate(sceneObjects[index]);
-                        sceneObjects.Remove(index);
-                        break;
+                        cell ??= new(index);
+                        hexCells.Add(index, cell);
                     }
                 }
+                GUILayout.Space(cellOffsetX);
             }
             GUILayout.EndHorizontal(); GUILayout.Space(cellOffsetY);
         }
-
+        EditorGUILayout.EndScrollView();
         EditorGUILayout.Space();
 
         hexGridData = (HexGridData)EditorGUILayout.ObjectField("Grid Data", hexGridData, typeof(HexGridData), false);
@@ -125,13 +126,7 @@ public class HexGridEditorWindow : EditorWindow
     {
         Vector3 spawnPos = grid.CellToWorld(new Vector3Int(x, y, 0));
         if (isAxial && spawnPos.magnitude > maxDistance) return;
-
-        GameObject cellObject = Instantiate(cellPrefab, spawnPos, Quaternion.identity, grid.transform);
-        cellObject.transform.localScale = Vector3.one;
-        cellObject.name = $"Cell ({x}, {y})";
-
-        Vector2Int cellIndex = new Vector2Int(x, y);
-        sceneObjects.Add(cellIndex, cellObject);
+        Vector2Int cellIndex = new(x, y);
 
         cell ??= new(cellIndex);
         hexCells.Add(cellIndex, cell);
@@ -163,5 +158,12 @@ public class HexGridEditorWindow : EditorWindow
         {
             Debug.LogWarning("No valid HexGridData to load.");
         }
+    }
+    private bool IsIndexValid(int x, int y)
+    {
+
+        Vector3 spawnPos = grid.CellToWorld(new Vector3Int(x, y, 0));
+        if (isAxial && spawnPos.magnitude > maxDistance) return false;
+        return true;
     }
 }
