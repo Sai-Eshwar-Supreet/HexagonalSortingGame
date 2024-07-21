@@ -67,5 +67,6 @@ public class HexSpawner : MonoBehaviour
             Transform spawnTransform = spawnPositionsTransform.GetChild(i);
             spawnTransform.Clear();
         }
+        availableStacksCount = 0;
     }
 }

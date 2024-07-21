@@ -109,6 +109,9 @@ public class GameManager : MonoBehaviour
     {
         levelObject.SetActive(false);
         levelObject.SetActive(true);
+        currentProgress = 0;
+        progressSlider.value = 0;
+        tempExp = 0;
     }
 
     public void ExitGame()
@@ -117,6 +120,9 @@ public class GameManager : MonoBehaviour
         OnStateChange?.Invoke(CurrentState);
         menuObject.SetActive(true);
         levelObject.SetActive(false);
+        currentProgress = 0;
+        progressSlider.value = 0;
+        tempExp = 0;
     }
 
     public void AddExp(int exp)
