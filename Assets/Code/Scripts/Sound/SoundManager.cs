@@ -12,15 +12,11 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private AudioSource themeAudioSource;
     [SerializeField] private AudioSource uiSfxAudioSource;
-    [SerializeField] private AudioSource environmentSfxAudioSource;
 
     private static SoundManager instance;
     public static readonly string MasterVolumeName = "Master Volume";
     public static readonly string MusicVolumeName = "Music Volume";
     public static readonly string SfxVolumeName = "Sfx Volume";
-    public static readonly string UISfxVolumeName = "UI Sfx Volume";
-    public static readonly string EnvironmentSfxVolumeName = "Environment Sfx Volume";
-    public static readonly string AmbienceVolumeName = "Ambience Volume";
 
     private void Awake()
     {
@@ -41,13 +37,5 @@ public class SoundManager : MonoBehaviour
     public static void StopUISfx()
     {
         instance.uiSfxAudioSource.Stop();
-    }
-    public static void PlayEnvironmentSfx(AudioClip clip, float volume)
-    {
-        instance.environmentSfxAudioSource.PlayOneShot(clip, volume);
-    }
-    public static void StopEnvironmentSfx()
-    {
-        instance.environmentSfxAudioSource.Stop();
     }
 }

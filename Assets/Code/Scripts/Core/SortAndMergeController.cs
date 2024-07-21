@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class SortAndMergeController : MonoBehaviour
 {
-
-    private List<HexCell> modifiedCells = new();
+    private readonly List<HexCell> modifiedCells = new();
 
     private void Awake()
     {
@@ -67,16 +66,16 @@ public class SortAndMergeController : MonoBehaviour
 
         foreach (var element in poppedElements)
         {
-            cell.OccupantStack.Add(element);
+            cell.OccupantStack.Add(element, true);
             yield return new WaitForSeconds(0.15f);
         }
 
-        CheckForStackMerge(cell);
+        yield return CheckForStackMerge(cell);
     }
-    private void CheckForStackMerge(HexCell cell)
+    private IEnumerator CheckForStackMerge(HexCell cell)
     {
         HexStack hexStack = cell.OccupantStack;
-        if (hexStack.Elements.Count < 10) return;
+        if (hexStack.Elements.Count < 10) yield break;
 
         int topIndex = hexStack.TopHexagonIndex;
 
@@ -88,7 +87,7 @@ public class SortAndMergeController : MonoBehaviour
             count++;
         }
 
-        if (count < 10) return;
+        if (count < 10) yield break;
 
         GameManager.Instance.AddExp(count * LevelManager.Instance.CurrentLevelData.ExpPerElement);
 
@@ -97,6 +96,7 @@ public class SortAndMergeController : MonoBehaviour
             var element = hexStack.Pop();
             element.SetParent(null);
             element.DestroySelf();
+            yield return new WaitForSeconds(0.05f);
         }
         if (hexStack.Elements.Count == 0) hexStack.DestroyStack();
         modifiedCells.Add(cell);

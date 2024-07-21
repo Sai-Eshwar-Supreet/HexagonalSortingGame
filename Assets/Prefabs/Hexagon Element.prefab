@@ -48,6 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 5909072983493776129}
   meshCollider: {fileID: 2319407640887521014}
+  moveSound: {fileID: 8300000, guid: c0620e4fbb35d6b49a69d04b00a9c2b5, type: 3}
+  destroySound: {fileID: 8300000, guid: eaf4c5fe863baa042b6c91a2f1c483ea, type: 3}
 --- !u!64 &2319407640887521014
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -296,7 +296,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: buttons_10
+      name: Exit or close
       rect:
         serializedVersion: 2
         x: 2691
@@ -926,7 +926,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: buttons_40
+      name: Play Button
       rect:
         serializedVersion: 2
         x: 467
@@ -947,7 +947,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: buttons_41
+      name: Home Button
       rect:
         serializedVersion: 2
         x: 892
@@ -989,7 +989,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: buttons_43
+      name: Replay Button
       rect:
         serializedVersion: 2
         x: 1758
@@ -1400,21 +1400,24 @@ TextureImporter:
     nameFileIdTable:
       Blue Button_Clicked: -469477536
       Blue Button_Normal: -775807451
+      Exit or close: 896764183
       Green Button_Normal: 1957500794
       Green Help Button: -399059485
       GreenButton_Clicked: -1416753801
       HamButton: -541360309
+      Home Button: -1513635165
       Minus: 2025850201
       Pause Button: -2031289094
+      Play Button: 846439721
       Red Button_Clicked: 547076231
       RedButton_Normal: -1989461574
+      Replay Button: -1800940749
       Retry: -1764622424
       Settings: -1582001816
       Warning: 619637920
       Yellow circle: 1068232040
       buttons_0: 982110810
       buttons_1: -768068422
-      buttons_10: 896764183
       buttons_14: 259136664
       buttons_15: 1890855341
       buttons_16: -1884449019
@@ -1433,10 +1436,7 @@ TextureImporter:
       buttons_32: 53940023
       buttons_35: 426657515
       buttons_4: -1462993164
-      buttons_40: 846439721
-      buttons_41: -1513635165
       buttons_42: 1743152244
-      buttons_43: -1800940749
       buttons_44: -2103273429
       buttons_45: -1652847993
       buttons_46: -1897203900

@@ -9,6 +9,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(MeshRenderer), typeof(Animator))]
 public class ObjectFillController : MonoBehaviour
 {
+    [SerializeField] private AudioClip fillSound;
     [SerializeField] private float incrementor = 0.25f;
     private Animator animator;
     private MeshRenderer meshRenderer;
@@ -43,6 +44,7 @@ public class ObjectFillController : MonoBehaviour
     {
         while(progress < 1)
         {
+            if(progress % 0.1f == 0) SoundManager.PlayUISfx(fillSound, progress);
             meshRenderer.material.SetFloat("_FillPercent", progress);
             progress += Time.deltaTime * incrementor; 
             yield return null;

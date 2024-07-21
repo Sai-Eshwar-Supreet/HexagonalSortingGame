@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.EnhancedTouch;
 using ETouch = UnityEngine.InputSystem.EnhancedTouch;
 
@@ -15,11 +18,16 @@ public class InputManager : MonoBehaviour
     public event Action OnPrimaryFingerUp;
 
     private Finger primaryFinger;
+    private int uiLayer;
+
     public Finger PrimaryFinger => primaryFinger;
+
     private void Awake()
     {
         if (instance == null) instance = this;
         else enabled = false;
+
+        uiLayer = LayerMask.NameToLayer("UI");
     }
     private void OnEnable()
     {
@@ -37,6 +45,7 @@ public class InputManager : MonoBehaviour
     }
     private void FingerDownHandler(Finger finger)
     {
+        if (IsOnUI(finger.screenPosition)) return;
         if (primaryFinger == null)
         {
             primaryFinger = finger;
@@ -59,5 +68,19 @@ public class InputManager : MonoBehaviour
             primaryFinger = null;
             OnPrimaryFingerUp?.Invoke();
         }
+    }
+    private bool IsOnUI(Vector2 screenPos)
+    {
+        PointerEventData pointerEventData = new(EventSystem.current)
+        {
+            position = screenPos
+        };
+        List<RaycastResult> results = new();
+
+        EventSystem.current.RaycastAll(pointerEventData, results);
+
+        results = results.Where((result) => result.gameObject.layer == uiLayer).ToList();
+
+        return results.Count > 0;
     }
 }

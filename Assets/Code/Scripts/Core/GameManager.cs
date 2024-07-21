@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     public event Action<GameState> OnStateChange;
 
+
     [Header("Game Progression")]
     [SerializeField] private AnimationCurve progressionCurve;
     [SerializeField] private List<ObjectFillController> fillControllers;
@@ -27,11 +28,17 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject menuObject;
     [SerializeField] private GameObject levelObject;
+
+    [Header("Managers")]
+    [SerializeField] private UIManager uiManager;
+    [SerializeField] private EnergyManager energyManager;
+
+    [Header("UI")]
     [SerializeField] private Slider progressSlider;
     [SerializeField] private ButtonPressHandler fillButton;
 
     private int playerLevel;
-    [SerializeField] private int playerExp;
+    private int playerExp;
     private int nextLevelExp;
     private float currentProgress = 0;
 
@@ -83,16 +90,25 @@ public class GameManager : MonoBehaviour
 
     public void PlayGame()
     {
-        CurrentState = GameState.Play;
-        tempExp = 0;
-        OnStateChange?.Invoke(CurrentState);
-        menuObject.SetActive(false);
-        levelObject.SetActive(true);
+        if (energyManager.UseEnergy())
+        {
+            CurrentState = GameState.Play;
+            tempExp = 0;
+            OnStateChange?.Invoke(CurrentState);
+            menuObject.SetActive(false);
+            levelObject.SetActive(true);
+        }
     }
     public void PauseGame()
     {
         CurrentState = GameState.Pause;
         OnStateChange?.Invoke(CurrentState);
+    }
+
+    public void ReplayGame()
+    {
+        levelObject.SetActive(false);
+        levelObject.SetActive(true);
     }
 
     public void ExitGame()
@@ -122,16 +138,16 @@ public class GameManager : MonoBehaviour
         currentProgress = (playerExp + tempExp - previousExpMilestone) / (nextLevelExp - previousExpMilestone);
         progressSlider.value = currentProgress;
     }
-    [ContextMenu("AddExp")]
-    private void AddExp()
-    {
-        AddExp(100);
-    }
     private void UpdateBuildingFillProgress(bool status)
     {
         fillControllers[CurrentLevel - 2].UpdateProgress(status, () => {
             fillButton.gameObject.SetActive(false);
             CarouselNavigator.UnlockCarousel();
         });
+    }
+
+    public void ExitApplication()
+    {
+        Application.Quit();
     }
 }

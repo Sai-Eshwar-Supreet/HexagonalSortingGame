@@ -43,6 +43,7 @@ public class HexCell : MonoBehaviour
         HexStack hexStack = Instantiate(prefab, transform);
         int count = Random.Range(minMaxHexElementsCount.x, minMaxHexElementsCount.y + 1);
         hexStack.InstantiateElements(count);
+        hexStack.DisableInteraction();
         PlaceHexStack(hexStack);
     }
 }

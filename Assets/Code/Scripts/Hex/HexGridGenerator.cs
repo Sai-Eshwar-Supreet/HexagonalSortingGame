@@ -13,10 +13,14 @@ public class HexGridGenerator : MonoBehaviour
     [Header("References")]
     [SerializeField] private Grid grid;
     [SerializeField] private GameObject hexCellPrefab;
+    [SerializeField] private TargetGroupManager targetGroupManager;
+    [SerializeField] private Transform hexSpawnTransform;
 
     private readonly Dictionary<Vector2Int, HexCell> cells = new();
 
     private readonly List<Vector3> neighboursOffset = new();
+
+    private float hexSpawnerZ;
 
     private void Awake()
     {
@@ -35,13 +39,24 @@ public class HexGridGenerator : MonoBehaviour
     }
     private void GenerateGrid()
     {
+        foreach(var cell in cells.Values)
+        {
+            targetGroupManager.RemoveTarget(cell.transform);
+        }
+        
         transform.Clear();
         cells.Clear();
+
+        hexSpawnerZ = 0;
 
         foreach(var gridCell in LevelManager.Instance.CurrentLevelData.GridData.hexCells)
         {
             CreateCell(gridCell.Index.x, gridCell.Index.y, gridCell.ShouldInitStacks);
         }
+
+        Vector3 hexSpawnerPos = hexSpawnTransform.position;
+        hexSpawnerPos.z = hexSpawnerZ - 2;
+        hexSpawnTransform.position = hexSpawnerPos;
     }
     private void SetupNeighborsOffset()
     {
@@ -61,9 +76,12 @@ public class HexGridGenerator : MonoBehaviour
         Vector3 spawnPos = grid.CellToWorld(new Vector3Int(x, y, 0));
 
         HexCell cell = Instantiate(hexCellPrefab, spawnPos, Quaternion.identity, transform).GetComponent<HexCell>();
+        targetGroupManager.AddTarget(cell.transform);
         cells.Add(new Vector2Int(x, y), cell);
         if(shouldInitStacks) cell.SpawnInitStacks();
         cell.gameObject.name = $"Cell ({x}, {y})";
+
+        if(spawnPos.z < hexSpawnerZ) hexSpawnerZ = spawnPos.z;
     }
 
     public static List<HexCell> GetNeighbors_Static(HexCell cell) => instance.GetNeighbors(cell);

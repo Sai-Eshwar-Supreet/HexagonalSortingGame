@@ -9,14 +9,14 @@ public class HexStack : MonoBehaviour
     [SerializeField] private List<Material> materials;
     public Stack<HexElement> Elements { get; private set; }
 
-    public void Add(HexElement element)
+    public void Add(HexElement element, bool animate = false)
     {
         Elements ??= new();
         Elements.Push(element);
         element.Configure(this);
         element.SetParent(transform);
-        element.LocalMove(GetNewElementPositon(Elements.Count - 1));
-
+        if (animate) element.LocalMove(GetNewElementPositon(Elements.Count - 1));
+        else element.transform.localPosition = GetNewElementPositon(Elements.Count - 1);
     }
 
     public void DisableInteraction()
